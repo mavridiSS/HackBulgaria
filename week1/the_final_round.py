@@ -3,26 +3,38 @@ import math
 
 def count_words(arr):
     return {word: arr.count(word) for word in arr}
-print(count_words(["apple", "banana", "apple", "pie"]))
 
 
 def unique_words_count(arr):
     return len([ch for ch in count_words(arr).items()])
-print(unique_words_count(["HELLO!"] * 10))
 
 
 def nan_expand(times):
-    NaN = "Not a "
-    result = NaN * times
-    result += "NaN"
+    result = ""
+    if times > 0:
+        NaN = "Not a "
+        result = NaN * times
+        result += "NaN"
     return result
-print(nan_expand(3))
 
 
 def iterations_of_nan_expand(expanded):
-    return expanded.count("Not a")
-print(iterations_of_nan_expand(
-    'Not a Not a Not a Not a Not a Not a Not a Not a Not a Not a NaN'))
+    nan_table = {}
+    n = len(expanded)
+
+    current_index = 0
+
+    while True:
+        current_expand = nan_expand(current_index)
+        nan_table[current_expand] = current_index
+
+        if len(current_expand) > n:
+            break
+
+    if expanded in nan_table:
+        return nan_table[expanded]
+
+    return False
 
 
 def sum_of_divisors(n):
@@ -62,20 +74,6 @@ def prime_factorization(n):
             n = n // prime ** times
         prime = next_prime(prime)
     return result
-print(prime_factorization(356))
-
-
-def prime_factorization2(n):
-    prime_numbers = [3, 5]
-    result = []
-    for prime in prime_numbers:
-        if n > 1:
-            times = divide_count(n, prime)
-            if times != 0:
-                result.append((prime, times))
-                n = n // prime ** times
-    return result
-print(prime_factorization2(45))
 
 
 def take_same(arr):
@@ -89,36 +87,43 @@ def take_same(arr):
     return result
 
 
-def find_equals(arr):
+def group(arr):
     result = []
     while len(arr) > 0:
         curr_group = take_same(arr)
         result.append(curr_group)
         arr = arr[len(curr_group):]
     return result
-print(find_equals([1, 1, 1, 2, 3]))
 
 
 def max_consecutive(items):
-    return len(max(find_equals(items)))
-print(max_consecutive([1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5]))
+    return len(max(group(items)))
 
 
 def groupby(func, seq):
     g = func
     groupby_dict = {}
     key_list = list(set([g(x) for x in seq]))
-    value_list = []
-    index = 0
-    n = len(key_list)
-    for numb in seq:
-        while index < n:
-            if g(numb) == key_list[index]:
-                value_list.append(numb)
-                groupby_dict[key_list[index]] = value_list
-            index += 1
+    result = list()
+    for key in key_list:
+        for element in seq:
+            if g(element) == key:
+                result.append(element)
+        groupby_dict[key] = result
+        result = list()
     return groupby_dict
-print(groupby(lambda x: x % 2, [0, 1, 2, 3, 4, 5, 6, 7]))
+
+
+def prime_factorization2(n):
+    prime_numbers = [3, 5]
+    result = []
+    for prime in prime_numbers:
+        if n > 1:
+            times = divide_count(n, prime)
+            if times != 0:
+                result.append((prime, times))
+                n = n // prime ** times
+    return result
 
 
 def prepare_meal(number):
@@ -134,7 +139,21 @@ def prepare_meal(number):
         elif pair[0] == 5:
             result += "eggs " * pair[1]
     return result
-print(prepare_meal(45*25))
+
+
+def reduce_file_path(path):
+    splitted = path.split("/")
+    result = [ch for ch in splitted if ch != '.' and ch != ""]
+    return result
+print(reduce_file_path("/"))
+print(reduce_file_path("/srv/../"))
+print(reduce_file_path("/srv/www/htdocs/wtf/"))
+print(reduce_file_path("/srv/www/htdocs/wtf"))
+print(reduce_file_path("/srv/./././././"))
+print(reduce_file_path("/etc//wtf/"))
+print(reduce_file_path("/etc/../etc/../etc/../"))
+print(reduce_file_path("/////////"))
+print(reduce_file_path("/../"))
 
 
 def is_an_bn(word):
@@ -154,4 +173,77 @@ def is_an_bn(word):
     if an_counter == bn_counter and an_counter + bn_counter == len(word):
         return True
     return False
-print(is_an_bn("aaabbbaaabbb"))
+
+
+def sum_digits(n):
+    result = 0
+    while n > 0:
+        result += n % 10
+        n = n / 10
+    return result
+
+
+def is_credit_card_valid(n):
+    list_numbers = [int(i) for i in str(n)]
+    index = 1
+    while index < len(list_numbers):
+        list_numbers[index] = list_numbers[index] * 2
+        index += 2
+    return sum(sum_digits(i) for i in list_numbers) % 10 == 0
+
+
+def goldbach(n):
+    result = list()
+    curr_prime = 2
+    while curr_prime <= n / 2:
+        if is_prime(n - curr_prime):
+            result.append((curr_prime, n - curr_prime))
+        curr_prime = next_prime(curr_prime)
+    return result
+
+
+def magic_square(matrix):
+    result = list()
+    index_element = 0
+    n = len(matrix)
+    for row in matrix:
+        result.append(sum(row))
+    while index_element < n:
+        result.append(sum([matrix[index][index_element]
+                      for index in range(n)]))
+        index_element += 1
+    result.append(sum([matrix[index][index]
+                  for index in range(n)]))
+    result.append(sum([matrix[index][n - index - 1]
+                  for index in range(n)]))
+    return all([x == (n * (n ** 2 + 1)) / 2
+                for x in result])
+
+
+def leap_year(year):
+    if year % 4 != 0:
+        return False
+    elif year % 100 != 0:
+        return True
+    elif year % 400 != 0:
+        return False
+    else:
+        return True
+
+
+def dayofweek(y, m, d):
+    t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4]
+    y -= m < 3
+    return (y + y/4 - y/100 + y/400 + t[m-1] + d) % 7
+
+
+def friday_years(start, end):
+    result = 0
+    for year in range(start, end + 1):
+        if leap_year(year):
+            if dayofweek(year, 1, 1) == 5 or dayofweek(year, 1, 2) == 5:
+                result += 1
+        if not leap_year(year):
+            if dayofweek(year, 1, 1) == 5:
+                result += 1
+    return result
