@@ -142,18 +142,21 @@ def prepare_meal(number):
 
 
 def reduce_file_path(path):
-    splitted = path.split("/")
-    result = [ch for ch in splitted if ch != '.' and ch != ""]
-    return result
-print(reduce_file_path("/"))
-print(reduce_file_path("/srv/../"))
-print(reduce_file_path("/srv/www/htdocs/wtf/"))
-print(reduce_file_path("/srv/www/htdocs/wtf"))
-print(reduce_file_path("/srv/./././././"))
-print(reduce_file_path("/etc//wtf/"))
-print(reduce_file_path("/etc/../etc/../etc/../"))
-print(reduce_file_path("/////////"))
-print(reduce_file_path("/../"))
+    splitted = [ch for ch in path.split("/") if ch != '.' and ch != ""]
+    n = len(splitted) - 1
+    result = list()
+    while n >= 0:
+        if splitted[n] == "..":
+            result = splitted[0:n-1]
+            n -= 2
+        else:
+            result.insert(0, splitted[n])
+            n -= 1
+    if result == list():
+        return "/"
+    else:
+        result.insert(0, "")
+        return "/".join(result)
 
 
 def is_an_bn(word):
