@@ -1,0 +1,40 @@
+{
+ "Panda('Ivo', 'ivo@pandamail.com', 'male')": [
+  {
+   "_name": "Rado",
+   "_gender": "female",
+   "_email": "rado@pandamail.com"
+  },
+  {
+   "_name": "Gosho",
+   "_gender": "male",
+   "_email": "gosho@pandamail.com"
+  }
+ ],
+ "Panda('Gosho', 'gosho@pandamail.com', 'male')": [
+  {
+   "_name": "Ivo",
+   "_gender": "male",
+   "_email": "ivo@pandamail.com"
+  }
+ ],
+ "Panda('Petko', 'gosho@pandamail.com', 'male')": [
+  {
+   "_name": "Rado",
+   "_gender": "female",
+   "_email": "rado@pandamail.com"
+  }
+ ],
+ "Panda('Rado', 'rado@pandamail.com', 'female')": [
+  {
+   "_name": "Ivo",
+   "_gender": "male",
+   "_email": "ivo@pandamail.com"
+  },
+  {
+   "_name": "Petko",
+   "_gender": "male",
+   "_email": "gosho@pandamail.com"
+  }
+ ]
+}

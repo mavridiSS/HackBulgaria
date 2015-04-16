@@ -1,67 +1,80 @@
 class Bill:
     def __init__(self, amount):
+        if amount <= 0:
+            raise ValueError
+
+        if not isinstance(amount, int):
+            raise TypeError
+
         self.amount = amount
 
     def __int__(self):
         return self.amount
 
     def __str__(self):
-        return "A {}$ bill".format(self.amount)
+        return "A {}$ bill.".format(self.amount)
 
     def __hash__(self):
-        return hash(str(self.amount))
+        return hash(str(self.__str__()))
 
     def __eq__(self, other):
-        return self.amount == other.amount
+        return int(self.amount) == int(other.amount)
 
     def __repr__(self):
         return self.__str__()
 
-a = Bill(10)
-print(a)
+    def __lt__(self, other):
+        return int(self) < int(other)
 
 
-class BatchBill:
+class BillBatch:
     def __init__(self, bills):
-        self.bills = bills
+        self.__bills = bills
 
     def __len__(self):
-        return len(self.bills)
-
-    def total(self):
-        return sum([int(bill) for bill in self.bills])
+        return len(self.__bills)
 
     def __getitem__(self, index):
-        return self.bills[index]
+        return self.__bills[index]
+
+    def total(self):
+        return sum([int(bill) for bill in self.__bills])
 
 
 class CashDesk:
     def __init__(self):
-        self.desk_money = list()
+        self.money_holder = {}
+
+    def __store_money(self, bill):
+        if bill not in self.money_holder:
+            self.money_holder[bill] = 1
+        else:
+            self.money_holder[bill] += 1
 
     def take_money(self, money):
-        if (isinstance(money, Bill)):
-            self.desk_money.append(int(money))
-        else:
+        if isinstance(money, Bill):
+            self.__store_money(money)
+        elif isinstance(money, BillBatch):
             for bill in money:
-                self.desk_money.append(int(bill))
+                self.__store_money(bill)
 
     def total(self):
-        return sum([bill for bill in self.desk_money])
+        m = self.money_holder
+        return sum([int(bill) * m[bill] for bill in m])
 
     def inspect(self):
-        for bill in sorted(set(sorted(self.desk_money))):
-            print("{}$ bills - {}".format(bill, self.desk_money.count(bill)))
+        lines = []
+        total = self.total()
 
-values = [10, 20, 50, 100, 100, 100]
-bills = [Bill(value) for value in values]
+        lines.append("We have {}$ in the desk.".format(total))
 
-batch = BatchBill(bills)
+        if total > 0:
+            lines.append("Bills are:")
 
-desk = CashDesk()
+            bills = list(self.money_holder.keys())
+            bills.sort()
 
-desk.take_money(Bill(10))
-desk.take_money(batch)
-
-print(desk.total())
-desk.inspect()
+            for bill in bills:
+                line = "${} - {}".format(int(bill), self.money_holder[bill])
+                lines.append(line)
+        return "\n".join(lines)
