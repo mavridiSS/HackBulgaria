@@ -1,12 +1,12 @@
 #Enemy starts with health-100,random mana-[50,100] and random damage-[0,50]
 import random
-
+import time
 
 class Enemy:
 
     def __init__(self, health=100,
                  mana=random.randrange(50, 100, 10),
-                 damage=random.randrange(0, 50, 10)):
+                 damage=random.randrange(10, 50, 10)):
         self.health = health
         self.mana = mana
         self.damage = damage
@@ -42,6 +42,7 @@ class Enemy:
 
     def attack(self):
         return self.damage
+
 
 """
     def take_mana(self, potion=None):

@@ -69,12 +69,14 @@ class Hero:
         self.spell = spell
 
     def attack(self, by):
-        if self.weapon.damage == 0 and self.spell.damage == 0:
-            return 0
+        if self.weapon is None and self.spell is None:
+            raise Exception("No weapons and spells!")
         if by is "weapon":
+            if self.weapon is None:
+                raise Exception("No weapon!")
             return self.weapon.damage
         if by is "spell":
-            if self.can_cast():
+            if self.can_cast() and self.spell is not None:
                 self.mana -= self.spell.mana_cost
                 return self.spell.damage
             else:

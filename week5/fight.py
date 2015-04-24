@@ -8,6 +8,7 @@ class Fight:
     def __init__(self):
         self.hero_pos = None
         self.enemy_pos = None
+        self.is_hero_dead = None
 
     def fight_range(self, hero_pos, enemy_pos):
         hero_x, hero_y = hero_pos
@@ -46,6 +47,7 @@ class Fight:
                 print("Hero hits Enemy with {} for {} dmg. Enemy health is {}.".format(hero.weapon.name, hero.weapon.damage, enemy.health))
             if not enemy.is_alive():
                 print("Enemy is dead")
+                self.is_hero_dead = False
                 break
             if self.hero_pos == self.enemy_pos:
                 hero.take_damage(enemy.attack())
@@ -54,6 +56,8 @@ class Fight:
                 self.fight_range(self.hero_pos,self.enemy_pos)
             if not hero.is_alive():
                 print("Hero is dead")
+                self.is_hero_dead = True
                 break
+        return self.is_hero_dead
 
 
