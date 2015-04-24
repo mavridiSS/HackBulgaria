@@ -135,44 +135,46 @@ class Dungeon:
         if direction is "left":
             return self.swap_curr_point_with([hero_x, hero_y - 1])
 
+    def create_a_fight(self):
+        fight = Fight()
+        fight.start(self.hero_in_dungeon, Enemy(),
+                    self.hero_pos, self.enemy_to_fight_pos)
+        if fight.is_hero_dead:
+            self.place_on_map(self.hero_pos, ".")
+            self.spawn(self.hero_in_dungeon)
+        else:
+            self.place_on_map(self.enemy_to_fight_pos, ".")
+
     def hero_attack(self, by):
         hero_x, hero_y = self.hero_pos
         if by is "spell":
             if self.hero_in_dungeon.can_cast():
                 if self.has_enemy_in_range(self.hero_in_dungeon.spell.cast_range):
-                    a = Fight()
-                    a.start(self.hero_in_dungeon,
-                            Enemy(health=100, mana=100, damage=20),
-                            self.hero_pos, self.enemy_to_fight_pos)
+                    self.create_a_fight()
                 else:
                     return "Nothing in casting range {}".format(self.hero_in_dungeon.spell.cast_range)
             else:
                 return "Cannot cast spell"
         if by is "weapon":
             if self.has_enemy_in_range(1):
-                a = Fight()
-                a.start(self.hero_in_dungeon,
-                        Enemy(health=100, mana=100, damage=20),
-                        self.hero_pos, self.enemy_to_fight_pos)
+                self.create_a_fight()
             else:
                 return "Nothing in weapon range 1"
 
 
-h = Hero(name="Bron", title="Dragonslayer", health=100,
+h = Hero(name="Bron", title="Dragonslayer", health=10,
          mana=50, mana_regeneration_rate=2)
-s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=1)
+s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
 h.learn(s)
-w = Weapon(name="The Axe of Destiny", damage=20)
-h.equip(w)
+#w = Weapon(name="The Axe of Destiny", damage=20)
+#h.equip(w)
 dungeon = Dungeon("level1.txt")
 dungeon.print_map()
 dungeon.spawn(h)
 dungeon.move_hero("right")
 dungeon.move_hero("down")
-dungeon.move_hero("down")
-dungeon.move_hero("down")
 dungeon.print_map()
-dungeon.hero_attack(by="weapon")
+dungeon.hero_attack(by="spell")
 dungeon.print_map()
 
 """
