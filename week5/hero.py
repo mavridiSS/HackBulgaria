@@ -17,6 +17,9 @@ class Hero:
         self.damage_by_weapon = 0
         self.damage_by_spell = 0
 
+    def __repr__(self):
+        return "Hero(health={}, mana={})".format(self.health, self.mana)
+
     def known_as(self):
         return "{} the {}".format(self.name, self.title)
 
@@ -74,11 +77,13 @@ class Hero:
             return 0
         if by is "weapon":
             return self.damage_by_weapon
-        if by is "spell" and self.can_cast():
-            self.mana -= self.mana_cost
-            return self.damage_by_spell
-        else:
-            raise Exception("Cannot cast spell!")
+        if by is "spell":
+            if self.can_cast():
+                self.mana -= self.mana_cost
+                return self.damage_by_spell
+            else:
+                raise Exception("Cannot cast spell!")
 
-
+h = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
+print(h)
 # да направя за член данни оръжие и магия и да ги изициалиризирам като инстанции на оръжие и магия
