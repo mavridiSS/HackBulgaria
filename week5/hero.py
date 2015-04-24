@@ -12,10 +12,8 @@ class Hero:
         self.mana = mana
         self.max_mana = mana
         self.mana_regeneration_rate = mana_regeneration_rate
-        self.mana_cost = 0
-        self.cast_range = 0
-        self.damage_by_weapon = 0
-        self.damage_by_spell = 0
+        self.weapon = None
+        self.spell = None
 
     def __repr__(self):
         return "Hero(health={}, mana={})".format(self.health, self.mana)
@@ -33,8 +31,8 @@ class Hero:
         return self.get_health() > 0
 
     def can_cast(self):
-        if self.damage_by_spell == 0 or self.mana_cost > self.mana:
-            raise Exception("Cannot cast spell")
+        if self.spell.damage == 0 or self.spell.mana_cost > self.mana:
+            return False
         else:
             return True
 
@@ -62,28 +60,42 @@ class Hero:
             self.mana = self.max_mana
 
     def equip(self, weapon):
-        if self.damage_by_weapon > 0:
-            raise AttributeError("Hero is already equipped with weapon.")
+        if self.weapon is None:
+            self.weapon = weapon
         else:
-            self.damage_by_weapon = weapon.get_damage()
+            raise AttributeError("Hero is already equipped with weapon.")
 
     def learn(self, spell):
-        self.damage_by_spell = spell.get_damage()
-        self.mana_cost = spell.get_mana_cost()
-        self.cast_range = spell.get_cast_range()
+        self.spell = spell
 
     def attack(self, by):
-        if self.damage_by_weapon == 0 and self.damage_by_spell == 0:
+        if self.weapon.damage == 0 and self.spell.damage == 0:
             return 0
         if by is "weapon":
-            return self.damage_by_weapon
+            return self.weapon.damage
         if by is "spell":
             if self.can_cast():
-                self.mana -= self.mana_cost
-                return self.damage_by_spell
+                self.mana -= self.spell.mana_cost
+                return self.spell.damage
             else:
                 raise Exception("Cannot cast spell!")
 
+    def pick_weapon(self):
+        if self.spell is None and self.weapon is None:
+            return "Hero has no weapons and no spells"
+        if self.spell is None:
+            return "weapon"
+        if self.weapon is None:
+            return "spell"
+        if not self.spell and not self.weapon:
+            pass
+"""
 h = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
-print(h)
+w = Weapon(name="The Axe of Destiny", damage=20)
+s = Spell(name="Fireball", damage=30, mana_cost=150, cast_range=2)
+h.equip(w)
+h.learn(s)
+
+print(h.attack(by="spell"))
 # да направя за член данни оръжие и магия и да ги изициалиризирам като инстанции на оръжие и магия
+"""
