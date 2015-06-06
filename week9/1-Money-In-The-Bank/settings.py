@@ -1,0 +1,4 @@
+MAX_FAILED_LOGIN = 5
+TIME_LIMIT = '00:02:00'
+TIME_FORMAT = '%H:%M:%S'
+DATABASE = 'bank.db'
