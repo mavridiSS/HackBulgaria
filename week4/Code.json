@@ -1,25 +1,25 @@
 {
+ "shuffle": false,
  "songs": [
   {
-   "album": "The Sons of Odin",
    "artist": "Manowar",
    "title": "Odin",
-   "length": "3:44"
+   "length": "3:44",
+   "album": "The Sons of Odin"
   },
   {
-   "album": "The Sonds of Odin",
    "artist": "Manowar",
    "title": "Sons of Odin",
-   "length": "6:08"
+   "length": "6:08",
+   "album": "The Sonds of Odin"
   },
   {
-   "album": "The Sons of Odin",
    "artist": "Manowar",
    "title": "Odin",
-   "length": "1:3:44"
+   "length": "1:3:44",
+   "album": "The Sons of Odin"
   }
  ],
- "shuffle": false,
  "name": "Code",
  "repeat": false
 }

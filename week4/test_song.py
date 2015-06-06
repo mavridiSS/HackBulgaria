@@ -30,5 +30,6 @@ class TestSongClass(unittest.TestCase):
 
     def test_length_of_song_in_hours(self):
         self.assertEqual(self.song.length_of_song(hours=True), 1)
+
 if __name__ == '__main__':
     unittest.main()
