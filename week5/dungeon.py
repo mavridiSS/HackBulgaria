@@ -155,26 +155,3 @@ class Dungeon:
                 self.create_a_fight()
             else:
                 return "Nothing in weapon range 1"
-
-
-h = Hero(name="Bron", title="Dragonslayer", health=100,
-         mana=50, mana_regeneration_rate=2)
-s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
-h.learn(s)
-w = Weapon(name="The Axe of Destiny", damage=20)
-h.equip(w)
-dungeon = Dungeon("level1.txt")
-dungeon.print_map()
-dungeon.spawn(h)
-dungeon.move_hero("right")
-dungeon.move_hero("down")
-dungeon.print_map()
-dungeon.hero_attack(by="spell")
-dungeon.print_map()
-dungeon.move_hero("down")
-dungeon.move_hero("down")
-
-"""
-1.to fix max_health  и max_mana
-2.I can play the with the arrows of the keyboard/maybe with "while True" and the expression is:"raw_input and to make a move"
-"""
