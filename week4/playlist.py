@@ -98,13 +98,3 @@ class Playlist:
                 playlist.add_song(song)
             return playlist
 
-
-def test_load():
-    p = Playlist.load("Code.json")
-    try:
-        while True:
-            song = p.next_song()
-            print(str(song))
-            time.sleep(1)
-    except Exception as e:
-        print(e)
