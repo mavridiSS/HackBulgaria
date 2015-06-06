@@ -1,11 +1,18 @@
 import sys
 
 
-def main():
-    for arg in sys.argv[1:]:
-        with open(arg) as f:
+def file_data(filename):
+    with open(filename) as f:
             data = f.read()
-            print(data)
+    return data
 
-if __name__ == '__main__':
+
+def main():
+    if len(sys.argv[1:]) >= 1:
+        result = [file_data(filename) for filename in sys.argv[1:]]
+        print("\n".join(result))
+    else:
+        print("There are no arguments")
+
+if __name__ == "__main__":
     main()
