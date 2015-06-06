@@ -17,12 +17,13 @@ class BankAccount:
 
     def deposit(self, amount):
         self.__balance += amount
-        self.__acc_history.append(
-            "Deposited {}{}".format(amount, self.__currency))
+        self.__acc_history.append("Deposited {}{}".format(amount,
+                                                          self.__currency))
 
     def balance(self):
-        self.__acc_history.append("Balance check -> {}{}".format(self.__balance,
-                                                                 self.__currency))
+        balance = "Balance check -> {}{}"
+        self.__acc_history.append(balance.format(self.__balance,
+                                                 self.__currency))
         return self.__balance
 
     def withdraw(self, amount):
@@ -38,30 +39,30 @@ class BankAccount:
             return True
 
     def __str__(self):
-        return "Bank account for {} with balance of {}{}".format(self.__name,
-                                                                 self.__balance,
-                                                                 self.__currency)
+        acc_str = "Bank account for {} with balance of {}{}"
+        return acc_str.format(self.__name, self.__balance, self.__currency)
 
     def __int__(self):
-        self.__acc_history.append("__int__check -> {}{}".format(self.__balance,
-                                                                self.__currency))
+        check = "__int__check -> {}{}"
+        self.__acc_history.append(check.format(self.__balance,
+                                               self.__currency))
         return self.__balance
 
     def transfer_to(self, other, amount):
+        trf_to = "Transfer to {} for {}{}"
+        trf_from = "Transfer from {} for {}{}"
         if self.__balance >= amount:
             self.withdraw(amount)
             other.deposit(amount)
-            self.__acc_history.append(
-                "Transfer to {} for {}{}".format(other.__name, amount, self.__currency))
-            other.__acc_history.append(
-                "Transfer from {} for {}{}".format(self.__name, amount, self.__currency))
+            self.__acc_history.append(trf_to.format(other.__name,
+                                                    amount,
+                                                    self.__currency))
+            other.__acc_history.append(trf_from.format(self.__name,
+                                                       amount,
+                                                       self.__currency))
             return True
-        return False
+        else:
+            return False
 
     def history(self):
         return self.__acc_history
-
-rado = BankAccount("Rado", 1000, "BGN")
-ivo = BankAccount("Ivo", 0, "BGN")
-rado.balance()
-print(rado.history())
