@@ -1,27 +1,31 @@
 class Fraction:
 
     def __init__(self, numerator, denominator):
+        if denominator == 0:
+            raise ValueError("Denominator can't be zero.")
         self.numerator = numerator
         self.denominator = denominator
 
-    def __float__(self):
-        return float(self.numerator) / float(self.denominator)
-
     def __str__(self):
-        return "{} / {}".format(self.numerator, self.denominator)
+        if self.numerator == 0:
+            return "{}".format(self.numerator)
+        else:
+            return "{} / {}".format(self.numerator, self.denominator)
 
     def __repr__(self):
         return self.__str__()
 
     def __add__(self, other):
-        a = float(self.numerator) / float(self.denominator)
-        b = float(other.numerator) / float(other.denominator)
-        return float(Fraction(a*b, 1))
+        a = self.numerator * other.denominator
+        b = other.numerator * self.denominator
+        c = self.denominator * other.denominator
+        return Fraction(a + b, c)
 
     def __sub__(self, other):
-        a = float(self.numerator) / float(self.denominator)
-        b = float(other.numerator) / float(other.denominator)
-        return float(Fraction(a-b, 1))
+        a = self.numerator * other.denominator
+        b = other.numerator * self.denominator
+        c = self.denominator * other.denominator
+        return Fraction(a - b, c)
 
     def __mul__(self, other):
         a = self.numerator * other.numerator
@@ -29,13 +33,6 @@ class Fraction:
         return Fraction(a, b)
 
     def __eq__(self, other):
-        a = float(self.numerator) / float(self.denominator)
-        b = float(other.numerator) / float(other.denominator)
+        a = self.numerator / self.denominator
+        b = other.numerator / other.denominator
         return a == b
-
-a = Fraction(1, 2)
-b = Fraction(2, 1)
-
-print(a * b)
-# a - b
-# a * b
