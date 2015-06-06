@@ -95,30 +95,31 @@ class PandaSocialNetwork:
             return self.network[panda]
         return False
 
-    def connection_level(self, panda1, panda2):
-        visited = list()
-        queue = list()
-        counter = 0
-        if self.has_panda(panda1) == False or self.has_panda(panda2) == False:
-            return False
-        if panda2 in self.friends_of(panda1):
-            return 1
-        queue.append(panda1)
-        visited.append(panda1)
-        while len(queue) > 0:
-            t = queue.pop(0)
-            if t == panda2:
-                return counter
-            else:
-                counter += 1
-                for panda in self.friends_of(t):
-                    for item in self.friends_of(panda):
-                        if item == panda2:
-                            return counter + 1
+    def network_of_connections(self, panda):
+        network = {}
+        visited = set()
+        q = []
+
+        q.append((0, panda))
+        visited.add(panda)
+
+        while len(q) > 0:
+            level, node = q.pop(0)
+            network[node] = level
+            if self.friends_of(node):
+                for panda in self.friends_of(node):
                     if panda not in visited:
-                        queue.append(panda)
-                        visited.append(panda)
-        return False
+                        q.append((level + 1, panda))
+                        visited.add(panda)
+        return network
+
+    def connection_level(self, panda1, panda2):
+        network = self.network_of_connections(panda1)
+
+        if panda2 in network:
+            return network[panda2]
+        else:
+            return False
 
     def are_connected(self, panda1, panda2):
         if type(self.connection_level(panda1, panda2)) == int:
@@ -126,7 +127,14 @@ class PandaSocialNetwork:
         return False
 
     def how_many_gender_in_network(self, level, panda, gender):
-        
+        network = self.network_of_connections(panda)
+        counter = 0
+        for panda in network:
+            if (panda.gender() == gender
+                and network[panda] <= level
+                    and network[panda] != 0):
+                counter += 1
+        return counter
 
     def __repr__(self):
         for_save = {}
@@ -148,29 +156,16 @@ class PandaSocialNetwork:
         with open(file_name, "r") as f:
             contents = f.read()
             json_network = json.loads(contents)
-
             for panda in json_network:
-                for friends in json_network[panda]:
-                    panda2 = Panda(friends["_name"],
-                                   friends["_email"],
-                                   friends["_gender"])
-                    panda1 = eval(panda)
+                panda1 = eval(panda)
+                if not network.has_panda(panda1):
+                    network.add_panda(panda1)
+                for friend in json_network[panda]:
+                    panda2 = Panda(friend["_name"],
+                                   friend["_email"],
+                                   friend["_gender"])
                     if not network.has_panda(panda2):
                         network.add_panda(panda2)
                     if not network.are_friends(panda1, panda2):
                         network.make_friends(panda1, panda2)
         return network
-
-
-ivo = Panda("Ivo", "ivo@pandamail.com", "male")
-rado = Panda("Rado", "rado@pandamail.com", "female")
-gosho = Panda("Gosho", "gosho@pandamail.com", "male")
-petko = Panda("Petko", "gosho@pandamail.com", "male")
-sashko = Panda("Sasho", "gosho@pandamail.com", "male")
-rashko = Panda("Rashko", "gosho@pandamail.com", "male")
-a = PandaSocialNetwork()
-a.make_friends(ivo, rado)
-a.make_friends(ivo, gosho)
-a.make_friends(rado, petko)
-a.save("test.txt")
-print(PandaSocialNetwork2.load("test.txt"))
