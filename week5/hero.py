@@ -1,5 +1,3 @@
-from weapon import Weapon
-from spell import Spell
 from mana import Mana
 
 

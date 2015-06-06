@@ -1,6 +1,6 @@
-#Enemy starts with health-100,random mana-[50,100] and random damage-[0,50]
+# Enemy starts with health-100,random mana-[50,100] and random damage-[0,50]
 import random
-import time
+
 
 class Enemy:
 
