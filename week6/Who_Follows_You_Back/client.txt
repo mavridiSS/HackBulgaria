@@ -1,4 +1,0 @@
-{
-	'client_id':'dccff0533d607d6e324d',
-	'client_server':'25e001ef61924040d31a16dfcb8816e9a8a15570'
-}
