@@ -8,6 +8,7 @@ class Enemy:
                  mana=random.randrange(50, 100, 10),
                  damage=random.randrange(10, 50, 10)):
         self.health = health
+        self.max_health = health
         self.mana = mana
         self.damage = damage
 
@@ -21,6 +22,9 @@ class Enemy:
 
     def get_mana(self):
         return self.mana
+
+    def get_damage(self):
+        return self.damage
 
     def is_alive(self):
         return self.get_health() > 0
@@ -43,18 +47,3 @@ class Enemy:
     def attack(self):
         return self.damage
 
-
-"""
-    def take_mana(self, potion=None):
-        if isinstance(potion, Mana):
-            self.mana += potion.mana
-        self.mana += self.mana_regeneration_rate
-
-        if self.mana > self.max_mana:
-            self.mana = self.max_mana
-    def can_cast(self):
-        if self.damage_by_spell == 0 or self.mana_cost > self.mana:
-            raise Exception("Cannot cast spell")
-        else:
-            return True
-"""

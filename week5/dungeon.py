@@ -9,6 +9,9 @@ import random
 
 class Dungeon:
     HERO = "H"
+    ENEMY = "E"
+    SPAWN = "S"
+    TREASURE = "T"
     WALKABLE = "."
     OBSTACLE = "#"
 
@@ -16,16 +19,20 @@ class Dungeon:
         self.map = self.generate_map_from(filename)
 
         self.spawn_points = [[i, j] for i, line in enumerate(self.map)
-                             for j, ch in enumerate(line) if ch == "S"]
+                             for j, ch in enumerate(line)
+                             if ch == Dungeon.SPAWN]
 
         self.treasure_points = [[i, j] for i, line in enumerate(self.map)
-                                for j, ch in enumerate(line) if ch == "T"]
+                                for j, ch in enumerate(line)
+                                if ch == Dungeon.TREASURE]
 
         self.enemy_points = [[i, j] for i, line in enumerate(self.map)
-                             for j, ch in enumerate(line) if ch == "E"]
+                             for j, ch in enumerate(line)
+                             if ch == Dungeon.ENEMY]
 
         self.obstacle_points = [[i, j] for i, line in enumerate(self.map)
-                                for j, ch in enumerate(line) if ch == "#"]
+                                for j, ch in enumerate(line)
+                                if ch == Dungeon.OBSTACLE]
 
         self.treasures = [Weapon(name="The Axe of Destiny", damage=20),
                           Spell(name="Fireball",
@@ -40,8 +47,9 @@ class Dungeon:
         self.hero_in_dungeon = None
 
     def generate_map_from(self, filename):
-        lines = open(filename).read().split("\n")
-        lines = [line for line in lines if line.strip() != ""]
+        with open(filename, 'r') as f:
+            lines = f.read().split("\n")
+            lines = [line for line in lines if line.strip() != ""]
         return [list(line) for line in lines]
 
     def print_map(self):
@@ -85,11 +93,13 @@ class Dungeon:
         fight.start(self.hero_in_dungeon, Enemy(),
                     self.hero_pos, self.enemy_to_fight_pos)
         if fight.is_hero_dead:
-            self.place_on_map(self.hero_pos, Dungeon.WALKABLE)
+            self.place_on_map(self.hero_pos, Dungeon.ENEMY)
+            self.place_on_map(self.enemy_to_fight_pos, Dungeon.WALKABLE)
             self.spawn(self.hero_in_dungeon)
         else:
             self.enemy_points.remove(self.enemy_to_fight_pos)
-            self.place_on_map(self.enemy_to_fight_pos, Dungeon.WALKABLE)
+            self.place_on_map(self.enemy_to_fight_pos, Dungeon.HERO)
+            self.place_on_map(self.hero_pos, Dungeon.WALKABLE)
 
     def trigger_action(self, point):
         x, y = point
@@ -151,7 +161,22 @@ class Dungeon:
             else:
                 return "Cannot cast spell"
         if by is "weapon":
-            if self.has_enemy_in_range(1):
+            if self.has_enemy_in_range(2):
                 self.create_a_fight()
             else:
-                return "Nothing in weapon range 1"
+                return "Nothing in weapon range 2"
+
+
+a = Dungeon("level1.txt")
+a.print_map()
+hero = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
+w = Weapon(name="The Axe of Destiny", damage=20)
+s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
+hero.learn(s)
+hero.equip(w)
+a.spawn(hero)
+a.print_map()
+a.move_hero("right")
+a.move_hero("down")
+a.hero_attack("spell")
+a.print_map()

@@ -2,6 +2,7 @@ from mana import Mana
 
 
 class Hero:
+
     def __init__(self, name, title, health, mana, mana_regeneration_rate):
         self.name = name
         self.title = title
@@ -29,7 +30,9 @@ class Hero:
         return self.get_health() > 0
 
     def can_cast(self):
-        if self.spell.damage == 0 or self.spell.mana_cost > self.mana:
+        if self.spell is None:
+            return False
+        elif self.spell.mana_cost > self.mana:
             return False
         else:
             return True
@@ -89,13 +92,3 @@ class Hero:
             return "spell"
         if not self.spell and not self.weapon:
             pass
-"""
-h = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
-w = Weapon(name="The Axe of Destiny", damage=20)
-s = Spell(name="Fireball", damage=30, mana_cost=150, cast_range=2)
-h.equip(w)
-h.learn(s)
-
-print(h.attack(by="spell"))
-# да направя за член данни оръжие и магия и да ги изициалиризирам като инстанции на оръжие и магия
-"""

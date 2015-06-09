@@ -5,6 +5,7 @@ from weapon import Weapon
 
 
 class Fight:
+    FIGHT_START = "A fight is started between our {} and {}"
     HERO_ATTACK = "Hero hits Enemy with {} for {} dmg. Enemy health is {}."
     ENEMY_ATTACK = "Enemy hits Hero for {} dmg. Hero health is {}."
     HERO_CAST_ATTACK = "Hero casts a {}, hits Enemy for {} dmg.Enemy health is {}."
@@ -16,7 +17,7 @@ class Fight:
     def __init__(self):
         self.hero_pos = None
         self.enemy_pos = None
-        self.is_hero_dead = None
+        self.is_hero_dead = False
 
     def fight_range(self, hero_pos, enemy_pos):
         hero_x, hero_y = hero_pos
@@ -41,7 +42,7 @@ class Fight:
     def start(self, hero, enemy, hero_pos, enemy_pos):
         self.hero_pos = hero_pos
         self.enemy_pos = enemy_pos
-        print("A fight is started between our {} and {}".format(hero, enemy))
+        print(Fight.FIGHT_START.format(hero, enemy))
         while True:
             if hero.weapon.damage > hero.spell.damage:
                 enemy.take_damage(hero.attack(by="weapon"))
