@@ -1,3 +1,0 @@
-{
- "Panda('Ivo', 'ivo@pandamail.com', 'male')": []
-}
