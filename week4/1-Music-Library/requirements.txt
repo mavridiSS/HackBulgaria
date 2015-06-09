@@ -1,2 +1,0 @@
-tabulate==0.7.5
-mutagen==1.28
