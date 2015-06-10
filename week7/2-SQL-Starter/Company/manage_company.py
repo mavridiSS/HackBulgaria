@@ -1,11 +1,8 @@
 import sqlite3
 import re
+from company_interface import CompanyInterface
 
 company = sqlite3.connect('company.db')
-
-"""
-Will return me a Row object which has notations like dict "row["email"]" for example
-"""
 
 company.row_factory = sqlite3.Row
 
@@ -22,8 +19,7 @@ def wanna_quit():
 while True:
     user_input = input("command>")
     if user_input == "list_employees":
-        list_employees = """ SELECT id,name,position FROM users """
-        result = cursor.execute(list_employees)
+        result = CompanyInterface.list_employees()
         for user in result:
             print(user["id"], "-", user["name"], "-", user["position"])
 
