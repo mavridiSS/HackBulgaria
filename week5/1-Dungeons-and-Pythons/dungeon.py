@@ -165,18 +165,3 @@ class Dungeon:
                 self.create_a_fight()
             else:
                 return "Nothing in weapon range 2"
-
-
-a = Dungeon("level1.txt")
-a.print_map()
-hero = Hero(name="Bron", title="Dragonslayer", health=100, mana=100, mana_regeneration_rate=2)
-w = Weapon(name="The Axe of Destiny", damage=20)
-s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
-hero.learn(s)
-hero.equip(w)
-a.spawn(hero)
-a.print_map()
-a.move_hero("right")
-a.move_hero("down")
-a.hero_attack("spell")
-a.print_map()
