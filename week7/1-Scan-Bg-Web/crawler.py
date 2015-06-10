@@ -1,4 +1,5 @@
 import requests
+from settings import HEADERS, REGISTER
 from histogram import Histogram
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
@@ -11,15 +12,6 @@ def get_html(url):
 def domain_from_url(url):
     parsed = urlparse(url)
     return parsed[0] + "://" + parsed[1]
-
-REGISTER = "http://register.start.bg"
-HEADERS = {
- "User-Agent":
- "User-Agent: Mozilla/5.0 (Windows NT 6.1)" +
- "AppleWebKit/537.36" +
- "(KHTML, like Gecko)" +
- "Chrome/41.0.2228.0 Safari/537.36"
-}
 
 
 def find_links():
