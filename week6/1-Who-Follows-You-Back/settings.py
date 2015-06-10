@@ -1,0 +1,1 @@
+URL = 'https://api.github.com/users/{}/{}?page={}&client_id={}&client_secret={}'

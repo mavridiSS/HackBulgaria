@@ -1,12 +1,14 @@
 import requests
 import json
+from settings import URL
+from client_settings import CLIENT_ID, CLIENT_SECRET
 from DirectedGraph import DirectedGraph
 
 
-URL = 'https://api.github.com/users/{}/{}?page={}&client_id={}&client_secret={}'
-
-
 class GithubNetwork:
+    FOLLOWING = 'following'
+    FOLLOWERS = 'followers'
+
     def __init__(self, username, level):
         if level >= 4:
             raise ValueError("Dont build such a big social\
@@ -21,39 +23,34 @@ class GithubNetwork:
         return [user['login'] for user in source.json()]
 
     @staticmethod
-    def load(filename):
-        with open(filename, 'r') as f:
-            config = json.load(f)
-        return config
-
-    @staticmethod
     def get_network_for(user):
-        network = {'following': [], 'followers': []}
-        config = GithubNetwork.load('client.json')
-        secret = config['client_secret']
-        client = config['client_id']
+        network = {GithubNetwork.FOLLOWING: [], GithubNetwork.FOLLOWERS: []}
+        secret = CLIENT_SECRET
+        client = CLIENT_ID
         cur_followers_page = 1
         cur_following_page = 1
         has_followers = True
         has_following = True
         while has_followers:
             followers = requests.get(URL.format(user,
-                                                'followers',
+                                                GithubNetwork.FOLLOWERS,
                                                 cur_followers_page,
                                                 client, secret))
             if followers.json():
-                network['followers'] += GithubNetwork.usernames_from(followers)
+                network[GithubNetwork.FOLLOWERS] += \
+                    GithubNetwork.usernames_from(followers)
             else:
                 has_followers = False
             cur_followers_page += 1
 
         while has_following:
             following = requests.get(URL.format(user,
-                                                'following',
+                                                GithubNetwork.FOLLOWING,
                                                 cur_following_page,
                                                 client, secret))
             if following.json():
-                network['following'] += GithubNetwork.usernames_from(following)
+                network[GithubNetwork.FOLLOWING] += \
+                    GithubNetwork.usernames_from(following)
             else:
                 has_following = False
 
@@ -71,12 +68,12 @@ class GithubNetwork:
             if curr_lvl + 1 > level:
                 break
             network = GithubNetwork.get_network_for(curr_node)
-            for follower in network['followers']:
+            for follower in network[GithubNetwork.FOLLOWERS]:
                 self.network.add_edge(follower, curr_node)
                 if follower not in visited:
                     visited.add(follower)
                     queue.append((curr_lvl + 1, follower))
-            for following in network['following']:
+            for following in network[GithubNetwork.FOLLOWING]:
                 self.network.add_edge(curr_node, following)
                 if following not in visited:
                     visited.add(following)
