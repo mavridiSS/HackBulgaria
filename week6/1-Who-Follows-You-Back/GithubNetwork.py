@@ -1,5 +1,4 @@
 import requests
-import json
 from settings import URL
 from client_settings import CLIENT_ID, CLIENT_SECRET
 from DirectedGraph import DirectedGraph
